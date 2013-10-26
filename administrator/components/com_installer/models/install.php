@@ -74,6 +74,8 @@ class InstallerModelInstall extends JModelLegacy
 		JClientHelper::setCredentialsFromRequest('ftp');
 		$app = JFactory::getApplication();
 
+		$symlink = false;
+
 		switch ($app->input->getWord('installtype'))
 		{
 			case 'folder':
@@ -83,6 +85,7 @@ class InstallerModelInstall extends JModelLegacy
 				break;
 
 			case 'upload':
+				$symlink = $app->input->getBool('install_symlink');
 				$package = $this->_getPackageFromUpload();
 				break;
 
@@ -105,6 +108,7 @@ class InstallerModelInstall extends JModelLegacy
 
 		// Get an installer instance
 		$installer = JInstaller::getInstance();
+		$installer->symlink = $symlink;
 
 		// Install the package
 		if (!$installer->install($package['dir']))
@@ -137,6 +141,9 @@ class InstallerModelInstall extends JModelLegacy
 		}
 
 		JInstallerHelper::cleanupInstall($package['packagefile'], $package['extractdir']);
+
+		// Reset to default value
+		$installer->symlink = false;
 
 		return $result;
 	}
