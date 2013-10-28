@@ -82,10 +82,10 @@ class InstallerModelInstall extends JModelLegacy
 				// Remember the 'Install from Directory' path.
 				$app->getUserStateFromRequest($this->_context . '.install_directory', 'install_directory');
 				$package = $this->_getPackageFromFolder();
+				$symlink = $app->input->getBool('install_symlink');
 				break;
 
 			case 'upload':
-				$symlink = $app->input->getBool('install_symlink');
 				$package = $this->_getPackageFromUpload();
 				break;
 
